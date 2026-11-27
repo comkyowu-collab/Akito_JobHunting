@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>就活 企業マップ（就職実績64社）</title>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f6f6f4; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e1dc;
+  --text:#0b0b0b; --text-2:#52514e; --muted:#7a7974;
+  --diff-S:#184f95; --diff-A:#2a78d6; --diff-B:#86b6ef; --diff-C:#d6d5cf; --now:#d03b3b; --tabbar:#e6e5e0;
+  --accent:#1c5cab; --fit-bg:#e3effc; --star:#b86e00;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#121211; --surface:#1a1a19; --surface-2:#262624; --border:#383835;
+    --text:#f0efec; --text-2:#c3c2b7; --muted:#9a998f;
+    --diff-S:#9ec5f4; --diff-A:#3987e5; --diff-B:#1c5cab; --diff-C:#4a4a46; --now:#e66767; --tabbar:#0d0d0c;
+    --accent:#86b6ef; --fit-bg:#1b2a3d; --star:#f0b54a;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#121211; --surface:#1a1a19; --surface-2:#262624; --border:#383835;
+  --text:#f0efec; --text-2:#c3c2b7; --muted:#9a998f;
+  --diff-S:#9ec5f4; --diff-A:#3987e5; --diff-B:#1c5cab; --diff-C:#4a4a46; --now:#e66767; --tabbar:#0d0d0c;
+  --accent:#86b6ef; --fit-bg:#1b2a3d; --star:#f0b54a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;line-height:1.6;font-size:15px}
+.wrap{max-width:1240px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:24px;margin:0 0 4px}
+h2{font-size:18px;margin:0 0 4px}
+.sub{color:var(--text-2);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.desc{color:var(--text-2);font-size:13px;margin:0 0 14px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--text-2);margin-bottom:14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.filters label{font-size:13px;color:var(--text-2)}
+select,input[type=search]{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)}
+input[type=search]{min-width:180px}
+.btn{font:inherit;font-size:13px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);cursor:pointer}
+
+/* matrix */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.matrix{display:grid;grid-template-columns:88px repeat(6,minmax(150px,1fr));gap:2px;min-width:1000px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.mh,.ml,.mc{background:var(--surface)}
+.mh{padding:10px 8px;font-size:13px;font-weight:600;text-align:center;background:var(--surface-2)}
+.mh small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.ml{padding:10px 8px;font-size:13px;font-weight:700;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;background:var(--surface-2)}
+.ml small{font-weight:400;color:var(--text-2);font-size:11px;text-align:center}
+.ml .bar{width:28px;height:6px;border-radius:3px}
+.mc{padding:8px;display:flex;flex-direction:column;gap:6px;min-height:60px}
+.chip{display:flex;align-items:center;gap:6px;font-size:12.5px;padding:5px 8px;border-radius:7px;border:1px solid var(--border);background:var(--surface);cursor:default;outline:none;line-height:1.35}
+.chip:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+.chip .fit{font-weight:700;color:var(--text-2);flex:none;width:1.1em;text-align:center}
+.chip.f3{background:var(--fit-bg);border-color:var(--accent);font-weight:600}
+.chip.f3 .fit{color:var(--accent)}
+.chip.f1{border-style:dashed;color:var(--text-2)}
+.chip .star{color:var(--star);margin-left:auto;flex:none}
+.chip .wish{font-size:10px;padding:0 4px;border:1px solid var(--text-2);border-radius:4px;color:var(--text-2);flex:none}
+.chip.dim{opacity:.18}
+.chip.haspage{cursor:pointer}
+.chip.haspage .nm{text-decoration:underline;text-underline-offset:3px}
+
+/* bars */
+.bars{display:flex;flex-direction:column;gap:10px}
+.brow{display:grid;grid-template-columns:150px 1fr 40px;align-items:center;gap:10px;font-size:13px}
+.btrack{display:flex;gap:2px;height:22px}
+.seg{height:100%;border-radius:0}
+.seg:first-child{border-radius:4px 0 0 4px}
+.seg:last-child{border-radius:0 4px 4px 0}
+.seg:only-child{border-radius:4px}
+.bn{color:var(--text-2);text-align:right;font-variant-numeric:tabular-nums}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:600;cursor:pointer;white-space:nowrap;position:sticky;top:0}
+th:hover{color:var(--accent)}
+td.c{text-align:center;white-space:nowrap}
+.badge{display:inline-block;min-width:24px;text-align:center;padding:1px 6px;border-radius:5px;font-weight:700;font-size:12px;color:#fff}
+.badge.B{color:#0b0b0b}
+:root[data-theme="dark"] .badge.S{color:#0b0b0b}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .badge.S{color:#0b0b0b} :root:not([data-theme="light"]) .badge.B{color:#fff}}
+:root[data-theme="dark"] .badge.B{color:#fff}
+.tbl-wrap{max-height:640px;overflow:auto;border:1px solid var(--border);border-radius:10px}
+.count{font-size:13px;color:var(--text-2);margin-left:auto}
+
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;max-width:300px;box-shadow:0 6px 24px rgba(0,0,0,.18);display:none}
+.tip b{font-size:14px}
+.tip .row{color:var(--text-2)}
+.notes{font-size:13px;color:var(--text-2)}
+.notes li{margin-bottom:4px}
+.top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.top > div{flex:1;min-width:240px}
+@media (max-width:640px){.brow{grid-template-columns:96px 1fr 32px;font-size:12px} h1{font-size:20px}}
+
+.badge.C{color:#0b0b0b}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .badge.C{color:#f0efec}}
+:root[data-theme="dark"] .badge.C{color:#f0efec}
+.chip{cursor:pointer}
+.chip .nm{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--border)}
+.chip:hover .nm{text-decoration-color:var(--accent)}
+.chip .sal{margin-left:auto;flex:none;font-size:11px;color:var(--text-2);font-variant-numeric:tabular-nums}
+.chip.listed{border-color:var(--accent)}
+.tag{font-size:10px;padding:0 4px;border-radius:4px;flex:none}
+.tag.kari{border:1px dashed var(--muted);color:var(--muted)}
+.tag.ouyo{background:var(--now);color:#fff}
+td a{color:inherit}
+td a:hover{color:var(--accent)}
+td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.num small{color:var(--muted)}
+.dp{display:inline-block;font-size:11px;padding:0 6px;margin:0 3px 3px 0;border-radius:4px;border:1px solid var(--border);color:var(--text-2);background:var(--surface-2);white-space:nowrap}
+/* sheet tabs */
+html,body{height:100%}
+body{display:flex;flex-direction:column;overflow:hidden}
+#main{flex:1;min-height:0;overflow-y:auto}
+#bar{flex:none;display:flex;align-items:stretch;background:var(--tabbar);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0px)}
+#tabs{display:flex;overflow-x:auto;scrollbar-width:none;flex:1}
+#tabs::-webkit-scrollbar{display:none}
+.stab{font:inherit;font-size:13.5px;padding:8px 18px 9px;border:none;border-right:1px solid var(--border);background:none;color:var(--text-2);cursor:pointer;white-space:nowrap;position:relative}
+.stab:hover{color:var(--text);background:var(--surface-2)}
+.stab[aria-selected="true"]{background:var(--surface);color:var(--text);font-weight:700}
+.stab[aria-selected="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:4px;height:3px;border-radius:2px;background:var(--accent)}
+.stab:focus-visible,.thm:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.thm{font:inherit;flex:none;font-size:12.5px;padding:0 14px;border:none;border-left:1px solid var(--border);background:none;color:var(--text-2);cursor:pointer;white-space:nowrap}
+
+/* ===== mobile ===== */
+body{padding-top:env(safe-area-inset-top,0px)}
+.mlist{display:none}
+.mcards{display:none}
+.ind{border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.ind h3{margin:0;padding:10px 12px;font-size:15px;background:var(--surface-2);display:flex;align-items:baseline;gap:8px}
+.ind h3 small{font-weight:400;color:var(--muted);font-size:12px}
+.drow{display:grid;grid-template-columns:44px 1fr;gap:8px;padding:8px 10px;border-top:1px solid var(--border);align-items:start}
+.drow .dl{display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:700;font-size:13px;padding-top:4px}
+.drow .dl .bar{width:24px;height:5px;border-radius:3px}
+.drow .chips{display:flex;flex-direction:column;gap:6px}
+.ccard{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--surface)}
+.ccard .h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ccard .h a{font-weight:700;font-size:15px;color:var(--text)}
+.ccard .m{font-size:12.5px;color:var(--text-2);margin-top:4px}
+.ccard .n{font-size:13px;margin-top:4px}
+/* detail sheet (tap) */
+#sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:20}
+#detail{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--surface);border-top-left-radius:16px;border-top-right-radius:16px;
+  padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.2);max-height:75vh;overflow:auto;font-size:14px}
+#detail .t{font-size:18px;font-weight:700;margin:0 0 4px}
+#detail .row{color:var(--text-2);font-size:13px;margin-bottom:8px}
+#detail dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0 0 10px}
+#detail dt{color:var(--muted);font-size:13px}
+#detail dd{margin:0}
+#detail .acts{display:flex;gap:8px;margin-top:12px}
+#detail .acts a,#detail .acts button{flex:1;text-align:center;font:inherit;font-size:14px;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);text-decoration:none;cursor:pointer}
+#detail .acts a{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #detail .acts a{color:#0b0b0b}}
+:root[data-theme="dark"] #detail .acts a{color:#0b0b0b}
+@media (max-width:760px){
+  .wrap{padding:16px 12px 32px}
+  .card{padding:14px}
+  .scroll{display:none}
+  .mlist{display:block}
+  .tbl-wrap{display:none}
+  .mcards{display:block}
+  .legend{font-size:12px;gap:6px 14px}
+  .filters input[type=search]{flex:1 1 100%;min-width:0}
+  .filters select{flex:1 1 40%}
+  .stab{padding:10px 14px 11px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<div id="main"><div class="wrap">
+  <div class="top">
+    <div>
+      <h1>就活 企業マップ（就職実績64社）</h1>
+      <p class="sub">就職実績の一覧にある64社を、業界と難易度で整理しました。難易度は企業の規模・知名度、平均年収、上場区分から付けた目安です。</p>
+    </div>
+  </div>
+
+  <section class="sheet" id="s-map">
+  <div class="card">
+    <h2>業界 × 難易度マップ</h2>
+    <p class="desc">企業名にマウスを乗せると、年収・株式・募集学科が出ます。<u>企業名をクリック</u>すると公式サイト（または検索結果）が新しいタブで開きます。スマホでは企業名をタップすると詳細が出ます。</p>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--diff-S)"></span>S：最難関</span>
+      <span><span class="sw" style="background:var(--diff-A)"></span>A：難関</span>
+      <span><span class="sw" style="background:var(--diff-B)"></span>B：標準</span>
+      <span><span class="sw" style="background:var(--diff-C);border:1px solid var(--border)"></span>C：狙いやすい</span>
+      <span><span class="sw" style="background:var(--fit-bg);border:1px solid var(--accent)"></span>上場企業（右端に平均年収）</span>
+      <span><span class="tag kari">仮</span> 業界を社名から仮に決めた企業</span>
+      <span><span class="tag ouyo">応用</span> 応用課程のみ</span>
+    </div>
+    <div class="filters">
+      <label for="deptF">募集学科</label>
+      <select id="deptF"><option value="">すべて</option><option>機械</option><option>電気</option><option>電子・情報</option><option>建築</option></select>
+      <label><input type="checkbox" id="listedF"> 上場企業だけ</label>
+    </div>
+    <div class="scroll"><div class="matrix" id="matrix"></div></div>
+    <div class="mlist" id="mlist"></div>
+  </div>
+  </section>
+
+  <section class="sheet" id="s-bars" hidden>
+  <div class="card">
+    <h2>業界別の社数（難易度の内訳）</h2>
+    <p class="desc">バーにマウスを乗せると内訳が出ます。</p>
+    <div class="legend"><span><span class="sw" style="background:var(--diff-S)"></span>S：最難関</span>
+      <span><span class="sw" style="background:var(--diff-A)"></span>A：難関</span>
+      <span><span class="sw" style="background:var(--diff-B)"></span>B：標準</span>
+      <span><span class="sw" style="background:var(--diff-C);border:1px solid var(--border)"></span>C：狙いやすい</span></div>
+    <div class="bars" id="bars"></div>
+  </div>
+  </section>
+
+  <section class="sheet" id="s-table" hidden>
+  <div class="card">
+    <h2>企業一覧</h2>
+    <p class="desc">見出しをクリックで並べ替え。企業名をクリックすると公式サイト（または検索結果）が開きます。</p>
+    <div class="filters">
+      <input type="search" id="q" placeholder="企業名・キーワードで検索" aria-label="検索">
+      <select id="gF" aria-label="業界"><option value="">全業界</option></select>
+      <select id="dF" aria-label="難易度"><option value="">全難易度</option><option>S</option><option>A</option><option>B</option><option>C</option></select>
+      <select id="tF" aria-label="募集学科"><option value="">全学科</option><option>機械</option><option>電気</option><option>電子・情報</option><option>建築</option></select>
+      <span class="count" id="cnt"></span>
+    </div>
+    <div class="mcards" id="mcards"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th data-k="name">企業</th><th data-k="g">業界</th><th data-k="d">難易度</th><th data-k="sal">平均年収</th><th data-k="stk">株式・資本</th><th data-k="dep">募集学科</th><th data-k="note">ひとこと</th>
+        </tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+  </div>
+  </section>
+
+  <section class="sheet" id="s-notes" hidden>
+  <div class="card notes">
+    <h2 style="color:var(--text)">この表の前提と注意</h2>
+    <ul>
+      <li><b>難易度は目安です。</b>企業の規模・知名度、有価証券報告書の平均年間給与、上場区分と親会社の規模から相対的に付けたもので、公式な倍率ではありません。福利厚生はまだ反映していません。</li>
+      <li><b>平均年収は上場企業だけ</b>の数字です（単体・決算期は表に記載）。非上場企業は公表されていないため空欄です。比較の基準として、上場企業全体の平均は692.6万円（2025年度決算、帝国データバンク調べ）です。</li>
+      <li><b>「仮」の企業</b>は、事業内容をまだ確認できておらず、業界を社名から仮に決めています。難易度も一律Cにしています。</li>
+      <li>企業名のリンクは、確認できた14社は公式サイトへ、残りは「社名 公式サイト」の検索結果へ飛びます。</li>
+      <li>社名・事業内容は2026年11月時点の情報をもとにしています。エントリー前に各社の採用ページで最新情報を確認してください（例：黒崎播磨は日本製鉄による完全子会社化で上場廃止の予定）。</li>
+    </ul>
+  </div>
+  </section>
+</div></div>
+<div id="bar">
+  <div id="tabs" role="tablist" aria-label="シート">
+    <button class="stab" role="tab" type="button" data-s="s-map" aria-selected="true">マップ</button>
+    <button class="stab" role="tab" type="button" data-s="s-bars" aria-selected="false">業界別の社数</button>
+    <button class="stab" role="tab" type="button" data-s="s-table" aria-selected="false">企業一覧</button>
+    <button class="stab" role="tab" type="button" data-s="s-notes" aria-selected="false">前提と注意</button>
+  </div>
+  <button class="thm" id="theme" type="button">ダーク / ライト</button>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+<div id="sheetbg" hidden></div>
+<div id="detail" role="dialog" aria-modal="true" aria-labelledby="dt-title" hidden></div>
+<script>
+const ALL=["機械","電気","電子・情報","建築"], MEI=["機械","電気","電子・情報"], KEN=["建築"];
+const IND=[
+ {id:"semi", name:"電機・電子・半導体", c:"--c1", note:"装置・部品メーカー本体と、大手の生産子会社に分かれます。"},
+ {id:"mach", name:"機械・設備メーカー", c:"--c2", note:"機械科の求人が中心。電気・電子情報も募集があります。"},
+ {id:"mat",  name:"素材・化学", c:"--c3", note:"製鉄系の大手グループと、地元の化学メーカーです。"},
+ {id:"infra",name:"設備工事・プラント", c:"--c4", note:"電気・空調の設備工事、発電所や鉄道の保守。電気科の求人が多い分野です。"},
+ {id:"it",   name:"IT・ソフトウェア", c:"--c5", note:"大手グループのシステム会社と、独立系のソフト開発会社です。"},
+ {id:"cons", name:"建設", c:"--c6", note:"建築科向けが中心。ゼネコンや空間デザイン会社は他学科も募集しています。"},
+];
+// [業界, 難易度, 企業名, 平均年収(万円)|null, 決算期, 株式・資本, 学科, ひとこと, 応用課程のみ, 業界は仮置き]
+const CO=[
+ ["semi","S","東京エレクトロン",1380,"26/3期","東証プライム",ALL,"半導体製造装置で国内最大手。"],
+ ["semi","A","安川グループ",870,"25/2期","東証プライム（安川電機）",MEI,"北九州本社。サーボモータ・産業用ロボットの世界大手。年収は安川電機本体の値。"],
+ ["semi","B","大分／長崎／宮崎キヤノン",null,"","非上場（キヤノンの子会社）",ALL,"キヤノンの九州の生産拠点。"],
+ ["semi","B","ローム・アッセンブリ マニュファクチャリング",null,"","非上場（ロームの子会社）",MEI,"ロームグループの生産会社。"],
+ ["semi","C","長州産業",null,"","非上場",ALL,"山口の太陽光発電システム・半導体関連装置メーカー。"],
+ ["semi","C","ホシデン九州",null,"","非上場（ホシデンの子会社）",ALL,"電子部品メーカーの九州拠点。"],
+ ["semi","C","芝浦エレテック",null,"","要確認",MEI,"事業内容は要確認。",0,1],
+ ["semi","C","エムイーシーテクノ",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+
+ ["mach","S","ダイキン工業",855,"25/3期","東証プライム",ALL,"空調機で世界トップクラス。"],
+ ["mach","A","平田機工",695,"25/3期","東証プライム",MEI,"熊本本社。自動車・半導体向けの生産設備。"],
+ ["mach","B","IHI物流産業システム",null,"","非上場（IHIの子会社）",MEI,"物流・搬送システムのメーカー。"],
+ ["mach","B","ヤンマーエネルギーシステム製造",null,"","非上場（ヤンマーグループ）",MEI,"発電・空調用のエンジン設備を製造。"],
+ ["mach","B","TOTOプラテクノ",null,"","非上場（TOTOの子会社）",ALL,"TOTOグループの製造会社。"],
+ ["mach","B","日鉄テックスエンジ",null,"","要確認（日本製鉄グループ）",ALL,"製鉄所などの設備エンジニアリング・保守。"],
+ ["mach","B","冨士ダイス",null,"","上場（年収は未取得）",MEI,"超硬工具・金型のメーカー。"],
+ ["mach","C","オーレックホールディングス",null,"","非上場",MEI,"福岡の農業機械メーカー。"],
+ ["mach","C","岡住工業",null,"","非上場",MEI,"地場の中堅メーカー。"],
+ ["mach","C","不二精機",null,"","要確認",MEI,"中堅メーカー。"],
+ ["mach","C","ロキテクノ",null,"","要確認",MEI,"フィルター製品のメーカー。"],
+ ["mach","C","京製メック",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+ ["mach","C","カンセツ",null,"","要確認",MEI,"事業内容は要確認。",0,1],
+ ["mach","C","九州テクノメタル",null,"","要確認",["機械"],"事業内容は要確認。",0,1],
+ ["mach","C","REALIZE",null,"","要確認",["機械"],"事業内容は要確認。",0,1],
+
+ ["mat","A","黒崎播磨",682,"25/3期","日本製鉄が完全子会社化を進行中（上場廃止へ）",ALL,"北九州本社の耐火物メーカー。"],
+ ["mat","A","日鉄ケミカル＆マテリアル",null,"","非上場（日本製鉄の子会社）",ALL,"日本製鉄グループの化学・素材会社。"],
+ ["mat","B","シャボン玉石けん",null,"","非上場",ALL,"北九州の無添加石けんメーカー。"],
+
+ ["infra","A","きんでん",997,"26/3期","東証プライム（関西電力グループ）",ALL,"電気設備工事の大手。"],
+ ["infra","A","日本電設工業",895,"26/3期","東証プライム（JR東日本が筆頭株主）",MEI,"鉄道電気工事の大手。",1],
+ ["infra","A","太平電業",788,"26/3期","東証プライム",MEI,"発電所などのプラント建設・メンテナンス。"],
+ ["infra","A","クラフティア（旧 九電工）",762,"26/3期","東証プライム（九州電力グループ）",MEI,"九州最大手の総合設備工事会社。"],
+ ["infra","A","東テク",null,"","東証プライム（年収は未取得）",ALL,"空調・計装機器の販売と設備工事。"],
+ ["infra","B","富士電機E&C",null,"","非上場（富士電機の子会社）",MEI,"電気・空調設備の工事。",1],
+ ["infra","B","三菱電機システムサービス",null,"","非上場（三菱電機の子会社）",MEI,"三菱電機製品の保守・サービス。"],
+ ["infra","B","三菱電機プラントエンジニアリング",null,"","非上場（三菱電機の子会社）",MEI,"発電・社会インフラ設備の据付・保守。"],
+ ["infra","B","西日本プラント工業",null,"","非上場（九州電力グループ）",ALL,"発電所の設備工事・保守。"],
+ ["infra","B","JR九州エンジニアリング",null,"","非上場（JR九州の子会社）",ALL,"車両や設備の保守。"],
+ ["infra","B","JR九州電気システム",null,"","非上場（JR九州の子会社）",MEI,"鉄道の電気設備。"],
+ ["infra","B","西部電気工業",null,"","要確認",MEI,"福岡の通信設備工事会社。"],
+ ["infra","B","日本海洋事業",null,"","非上場",ALL,"海洋調査船の運航と海洋調査。"],
+ ["infra","C","陽和",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+ ["infra","C","昭和アステック",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+
+ ["it","B","富士ソフト",null,"","非上場（2025年に上場廃止）",MEI,"独立系のソフト開発大手。採用人数は多め。"],
+ ["it","B","東芝情報システム",null,"","非上場（東芝の子会社）",ALL,"システム・組込みソフトの開発。"],
+ ["it","B","DNP情報システム",null,"","非上場（大日本印刷の子会社）",ALL,"大日本印刷グループのシステム会社。"],
+ ["it","C","日本トータル・システム",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+ ["it","C","アイコムソフト",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+ ["it","C","サイエンスパーク",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+ ["it","C","システムフロンティア",null,"","要確認",MEI,"事業内容は要確認。",0,1],
+ ["it","C","アイフォーコム",null,"","要確認",["電気","電子・情報","建築"],"事業内容は要確認。",0,1],
+ ["it","C","テクノブレイブ",null,"","要確認",ALL,"事業内容は要確認。",0,1],
+
+ ["cons","A","東亜建設工業",1019,"26/3期","東証プライム",["機械","電気","建築"],"港湾工事に強いゼネコン。"],
+ ["cons","A","五洋建設",936,"26/3期","東証プライム",KEN,"海洋土木の大手。売上高は約7,900億円。"],
+ ["cons","A","飛島建設",841,"24/3期","要確認",KEN,"中堅ゼネコン。"],
+ ["cons","A","丹青社",null,"","東証プライム（年収は未取得）",ALL,"商業施設や博物館の空間づくりの大手。"],
+ ["cons","B","船場",null,"","上場（年収は未取得）",KEN,"商業施設の内装・ディスプレイ。"],
+ ["cons","B","西鉄建設",null,"","非上場（西日本鉄道の子会社）",KEN,"西鉄グループの建設会社。"],
+ ["cons","B","生和コーポレーション",null,"","非上場",KEN,"賃貸マンションの企画・建設。"],
+ ["cons","C","DAIEIアーキテクツ",null,"","要確認（大英産業グループ）",KEN,"北九州の住宅・不動産グループの建設会社。"],
+ ["cons","C","谷川建設",null,"","非上場",["機械","電気","建築"],"地場の建設会社。"],
+ ["cons","C","志道工務店",null,"","要確認",ALL,"地場の建設会社。"],
+ ["cons","C","上村建設",null,"","要確認",KEN,"地場の建設会社。"],
+ ["cons","C","溝江建設",null,"","要確認",KEN,"地場の建設会社。"],
+ ["cons","C","西建設計",null,"","要確認",KEN,"建築設計の会社。"],
+ ["cons","C","美里建設",null,"","要確認",KEN,"地場の建設会社。",1],
+];
+
+// 公式サイト（確認済みのものだけ直接リンク。ほかは検索結果に飛ぶ）
+const HP={
+ "東京エレクトロン":"https://www.tel.co.jp/",
+ "安川グループ":"https://www.yaskawa.co.jp/",
+ "ダイキン工業":"https://www.daikin.co.jp/",
+ "平田機工":"https://www.hirata.co.jp/",
+ "黒崎播磨":"https://www.krosakiharima.com/",
+ "きんでん":"https://www.kinden.co.jp/",
+ "日本電設工業":"https://www.densetsu.co.jp/",
+ "太平電業":"https://www.taihei-dengyo.co.jp/",
+ "東テク":"https://www.totech.co.jp/",
+ "富士ソフト":"https://www.fsi.co.jp/",
+ "五洋建設":"https://www.penta-ocean.co.jp/",
+ "東亜建設工業":"https://www.toa-const.co.jp/",
+ "飛島建設":"https://www.tobishima.co.jp/",
+ "丹青社":"https://www.tanseisha.co.jp/",
+};
+const link=name=>{
+  const direct=HP[name];
+  const href=direct||"https://www.google.com/search?q="+encodeURIComponent(name.replace(/（.*?）/g,"")+" 公式サイト");
+  return `<a href="${href}" target="_blank" rel="noopener" title="${direct?"公式サイトを開く":"検索結果を開く"}">${name}<span class="ext">${direct?"↗":"🔍"}</span></a>`;
+};
+
+const G=IND.map(i=>i.name);
+const GS=["装置・部品メーカー","機械科が中心","製鉄系グループなど","電気科の求人が多い","システム・ソフト開発","建築科が中心"];
+const D=CO.map(r=>{
+  const gi=IND.findIndex(i=>i.id===r[0]);
+  const listed=/東証|上場/.test(r[5])&&!/非上場/.test(r[5]);
+  const href=HP[r[2]]||"https://www.google.com/search?q="+encodeURIComponent(r[2].replace(/（.*?）/g,"")+" 公式サイト");
+  return {name:r[2],gi,g:G[gi],d:r[1],sal:r[3],per:r[4],stk:r[5],dep:r[6],note:r[7],ouyo:!!r[8],kari:!!r[9],listed,href,direct:!!HP[r[2]]};
+});
+const DIFF={S:"最難関",A:"難関",B:"標準",C:"狙いやすい"};
+const DL=["S","A","B","C"];
+const salTxt=c=>c.sal?`${c.sal.toLocaleString("ja-JP")}万円（${c.per}）`:(c.listed?"未取得":"非公開");
+const tip=document.getElementById("tip");
+function showTip(e,c){
+  tip.innerHTML=`<b>${c.name}</b><div class="row">${c.g}／難易度 ${c.d}（${DIFF[c.d]}）${c.kari?"／業界は仮":""}</div>
+   <div style="margin-top:6px"><b style="font-size:12.5px">平均年収：</b>${salTxt(c)}</div>
+   <div><b style="font-size:12.5px">株式・資本：</b>${c.stk}</div>
+   <div><b style="font-size:12.5px">募集学科：</b>${c.dep.join("・")}${c.ouyo?"（応用課程のみ）":""}</div>
+   <div style="margin-top:4px">${c.note}</div>
+   <div style="margin-top:4px;color:var(--muted)">クリックで${c.direct?"公式サイト":"検索結果"}を開く</div>`;
+  tip.style.display="block"; moveTip(e);
+}
+function moveTip(e){
+  const r=e.target.getBoundingClientRect();
+  const x=e.clientX??(r.left+r.width/2), y=e.clientY??r.bottom;
+  const w=tip.offsetWidth, h=tip.offsetHeight;
+  let lx=x+14, ly=y+14;
+  if(lx+w>innerWidth-8) lx=x-w-14;
+  if(lx<8) lx=8;
+  if(ly+h>innerHeight-8) ly=y-h-14;
+  tip.style.left=lx+"px"; tip.style.top=ly+"px";
+}
+function hideTip(){tip.style.display="none"}
+const open=c=>window.open(c.href,"_blank","noopener");
+
+
+// ===== mobile: tap → detail sheet =====
+const TOUCH=matchMedia("(hover: none)").matches;
+const det=document.getElementById("detail"), bg=document.getElementById("sheetbg");
+function openDetail(c){
+  hideTip();
+  det.innerHTML=`<p class="t" id="dt-title">${c.name}</p>
+   <div class="row">${c.g}／難易度 ${c.d}（${DIFF[c.d]}）${c.kari?"／業界は仮":""}</div>
+   <dl><dt>平均年収</dt><dd>${salTxt(c)}</dd><dt>株式・資本</dt><dd>${c.stk}</dd>
+   <dt>募集学科</dt><dd>${c.dep.join("・")}${c.ouyo?"（応用課程のみ）":""}</dd></dl>
+   <div>${c.note}</div>
+   <div class="acts"><button type="button" id="dclose">閉じる</button><a href="${c.href}" target="_blank" rel="noopener">${c.direct?"公式サイトを開く":"検索で調べる"}</a></div>`;
+  det.hidden=false; bg.hidden=false;
+  document.getElementById("dclose").onclick=closeDetail;
+  document.getElementById("dclose").focus();
+}
+function closeDetail(){det.hidden=true;bg.hidden=true}
+bg.addEventListener("click",closeDetail);
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!det.hidden)closeDetail()});
+const act=c=>TOUCH?openDetail(c):open(c);
+
+function chipHTML(c,dim){
+  return `<div class="chip${c.listed?" f3 listed":""}${dim?" dim":""}" tabindex="0" role="button" data-i="${D.indexOf(c)}"><span class="nm">${c.name}</span>${c.kari?'<span class="tag kari">仮</span>':""}${c.ouyo?'<span class="tag ouyo">応用</span>':""}${c.sal?`<span class="sal">${c.sal}万</span>`:""}</div>`;
+}
+function bindChips(root){
+  root.querySelectorAll(".chip").forEach(el=>{
+    const c=D[+el.dataset.i];
+    if(!TOUCH){
+      el.addEventListener("mouseenter",e=>showTip(e,c));
+      el.addEventListener("mousemove",moveTip);
+      el.addEventListener("mouseleave",hideTip);
+    }
+    el.addEventListener("click",()=>act(c));
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act(c)}});
+  });
+}
+function renderMobileMap(){
+  const dep=document.getElementById("deptF").value, onlyL=document.getElementById("listedF").checked;
+  const el=document.getElementById("mlist");
+  el.innerHTML=G.map((g,gi)=>{
+    const all=D.filter(c=>c.gi===gi);
+    const rows=DL.map(d=>{
+      const cs=all.filter(c=>c.d===d).sort((a,b)=>(b.sal??0)-(a.sal??0)||(b.listed-a.listed));
+      if(!cs.length) return "";
+      return `<div class="drow"><div class="dl"><span class="bar" style="background:var(--diff-${d})"></span>${d}</div><div class="chips">${cs.map(c=>chipHTML(c,(dep&&!c.dep.includes(dep))||(onlyL&&!c.listed))).join("")}</div></div>`;
+    }).join("");
+    return `<div class="ind"><h3>${g}<small>${all.length}社・${GS[gi]}</small></h3>${rows}</div>`;
+  }).join("");
+  bindChips(el);
+}
+function renderMobileCards(rows){
+  const el=document.getElementById("mcards");
+  el.innerHTML=rows.map(c=>`<div class="ccard"><div class="h"><span class="badge ${c.d}" style="background:var(--diff-${c.d})">${c.d}</span><a href="${c.href}" target="_blank" rel="noopener">${c.name}</a>${c.kari?'<span class="tag kari">仮</span>':""}${c.ouyo?'<span class="tag ouyo">応用</span>':""}</div>
+    <div class="m">${c.g}｜${c.sal?`${c.sal.toLocaleString("ja-JP")}万円（${c.per}）`:(c.listed?"年収未取得":"年収非公開")}｜${c.stk}</div>
+    <div class="m">${c.dep.map(x=>`<span class="dp">${x}</span>`).join("")}</div>
+    <div class="n">${c.note}</div></div>`).join("")||`<p class="desc">条件に合う企業はありません。</p>`;
+}
+
+// matrix
+function renderMatrix(){
+  const m=document.getElementById("matrix");
+  const dep=document.getElementById("deptF").value, onlyL=document.getElementById("listedF").checked;
+  let h=`<div class="mh"></div>`+G.map((g,i)=>`<div class="mh">${g}<small>${GS[i]}</small></div>`).join("");
+  DL.forEach(d=>{
+    h+=`<div class="ml"><span class="bar" style="background:var(--diff-${d})"></span>${d}<small>${DIFF[d]}</small></div>`;
+    G.forEach((g,gi)=>{
+      const cs=D.filter(c=>c.gi===gi&&c.d===d).sort((a,b)=>(b.sal??0)-(a.sal??0)||(b.listed-a.listed));
+      h+=`<div class="mc">`+cs.map(c=>chipHTML(c,(dep&&!c.dep.includes(dep))||(onlyL&&!c.listed))).join("")+`</div>`;
+    });
+  });
+  m.innerHTML=h;
+  bindChips(m);
+  renderMobileMap();
+}
+
+// bars
+function renderBars(){
+  const max=Math.max(...G.map((g,gi)=>D.filter(c=>c.gi===gi).length));
+  const el=document.getElementById("bars");
+  el.innerHTML=G.map((g,gi)=>{
+    const cs=D.filter(c=>c.gi===gi);
+    const segs=DL.map(d=>({d,n:cs.filter(c=>c.d===d).length})).filter(s=>s.n);
+    return `<div class="brow"><div>${g}</div><div class="btrack" style="width:${cs.length/max*100}%">${segs.map(s=>`<div class="seg" data-g="${gi}" data-d="${s.d}" style="flex:${s.n};background:var(--diff-${s.d})"></div>`).join("")}</div><div class="bn">${cs.length}社</div></div>`;
+  }).join("");
+  el.querySelectorAll(".seg").forEach(s=>{
+    const gi=+s.dataset.g, d=s.dataset.d, list=D.filter(c=>c.gi===gi&&c.d===d);
+    s.addEventListener("mouseenter",e=>{tip.innerHTML=`<b>${G[gi]}：${d}（${DIFF[d]}）</b><div class="row">${list.length}社</div><div style="margin-top:4px">${list.map(c=>c.name).join("、")}</div>`;tip.style.display="block";moveTip(e)});
+    s.addEventListener("mousemove",moveTip);
+    s.addEventListener("mouseleave",hideTip);
+    s.addEventListener("click",e=>{if(TOUCH){s.dispatchEvent(new MouseEvent("mouseenter",{clientX:e.clientX,clientY:e.clientY}));}});
+  });
+}
+
+// table
+let sortK="d", sortDir=-1;
+const gF=document.getElementById("gF");
+G.forEach(g=>{const o=document.createElement("option");o.textContent=g;gF.appendChild(o)});
+function renderTable(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const g=gF.value, d=document.getElementById("dF").value, t=document.getElementById("tF").value;
+  const dOrd={S:4,A:3,B:2,C:1};
+  let rows=D.filter(c=>(!g||c.g===g)&&(!d||c.d===d)&&(!t||c.dep.includes(t))&&(!q||(c.name+c.note+c.stk+c.g).toLowerCase().includes(q)));
+  rows.sort((a,b)=>{
+    let va=a[sortK], vb=b[sortK];
+    if(sortK==="d"){va=dOrd[va];vb=dOrd[vb]}
+    if(sortK==="g"){va=a.gi;vb=b.gi}
+    if(sortK==="sal"){va=a.sal??-1;vb=b.sal??-1}
+    if(sortK==="dep"){va=a.dep.length;vb=b.dep.length}
+    if(va<vb) return -sortDir; if(va>vb) return sortDir;
+    return (a.gi-b.gi)||((b.sal??0)-(a.sal??0));
+  });
+  document.getElementById("tb").innerHTML=rows.map(c=>`<tr>
+    <td><b><a href="${c.href}" target="_blank" rel="noopener">${c.name}</a></b>${c.kari?' <span class="tag kari">仮</span>':""}${c.ouyo?' <span class="tag ouyo">応用課程のみ</span>':""}</td>
+    <td>${c.g}</td>
+    <td class="c"><span class="badge ${c.d}" style="background:var(--diff-${c.d})">${c.d}</span></td>
+    <td class="num">${c.sal?`${c.sal.toLocaleString("ja-JP")}万円<br><small>${c.per}</small>`:`<small>${c.listed?"未取得":"—"}</small>`}</td>
+    <td>${c.stk}</td>
+    <td>${c.dep.map(x=>`<span class="dp">${x}</span>`).join("")}</td>
+    <td>${c.note}</td></tr>`).join("");
+  renderMobileCards(rows);
+  document.getElementById("cnt").textContent=`${rows.length} / ${D.length}社`;
+}
+document.querySelectorAll("th").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k; if(sortK===k) sortDir*=-1; else {sortK=k; sortDir=(k==="name"||k==="g"||k==="stk"||k==="note")?1:-1}
+  renderTable();
+}));
+["q","gF","dF","tF"].forEach(id=>document.getElementById(id).addEventListener("input",renderTable));
+["deptF","listedF"].forEach(id=>document.getElementById(id).addEventListener("input",renderMatrix));
+document.getElementById("main").addEventListener("scroll",hideTip,{passive:true});
+
+// sheet tabs
+const tabs=[...document.querySelectorAll(".stab")];
+tabs.forEach(t=>t.addEventListener("click",()=>{
+  tabs.forEach(x=>x.setAttribute("aria-selected",x===t?"true":"false"));
+  document.querySelectorAll(".sheet").forEach(s=>s.hidden=s.id!==t.dataset.s);
+  hideTip(); document.getElementById("main").scrollTop=0;
+}));
+document.getElementById("theme").addEventListener("click",()=>{
+  const r=document.documentElement;
+  const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme=dark?"light":"dark";
+});
+renderMatrix(); renderBars(); renderTable();
+
+</script>
+</body>
+</html>
